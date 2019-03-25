@@ -49,7 +49,8 @@ def processPointCloud2(msg):
     vmax=24
 
 
-    cld= ros_numpy.numpify(msg, squeeze=False)
+    cld = ros_numpy.numpify(msg, squeeze=False)
+    rotatedData = rotate(cld)
 
     # n = 24*920
     # datacopy = np.zeros((n,3))
@@ -66,6 +67,8 @@ def processPointCloud2(msg):
     yvals= cld[vmin:vmax, umin:umax]['y'].ravel()
     zvals= cld[vmin:vmax, umin:umax]['z'].ravel()
     intsvals =  cld[vmin:vmax, umin:umax]['intensity'].ravel()
+
+
     sensorpos = np.array([0, 0, 0])
 
     data = np.zeros(np.shape(xvals), dtype=[
@@ -101,6 +104,24 @@ def playBag():
         publishAsPointcloud2(ros_numpy.numpify(msg, squeeze=False),topic)
     bag.close()
     # subscribePointCloud2FromSick()
+
+def rotate(cld):
+    print(len(cld['x'].ravel()))
+    datacopy = np.zeros((len(cld['x'].ravel()),3))
+    datacopy[:,0] = cld['x'].ravel()
+    datacopy[:,1] = cld['y'].ravel() - 3
+    datacopy[:,2] = cld['z'].ravel()
+    r = R.from_euler('x', -90, degrees=True)
+    rotatedData = np.zeros((len(cld['x'].ravel()),4))
+    rotatedData[:,0:3] = r.apply(datacopy)
+    rotatedData[:,3] = cld['intensity'].ravel()
+
+
+
+
+
+
+    return rotatedData
 
 if __name__ == '__main__':
     try:
