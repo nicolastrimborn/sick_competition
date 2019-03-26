@@ -47,7 +47,7 @@ def smoothness(Y):
 
 def slopecalc(x, y, sensorpos):
     #Sensor position correction, sensor pos desceibes an offset coordinate
-    y=y-sensorpos[2]
+    y=y-sensorpos[1]
     x=np.ravel(x)
     y=np.ravel(y)
     slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
@@ -62,7 +62,8 @@ if __name__ == '__main__':
     z = np.array([[1, 1, 1, 1, 1],[1, 1, 1, 1, 1]])
     Y = np.array([[1, 1, 1, 2, 3, 4, 4, 4, 4, 1],[1, 2, 3, 3, 3, 3, 4, 5, 6, 1],[1, 1, 1, 1, 1, 1, 1, 1, 1, 1]])
     # Defige sensor position to set reference frame on pole base (ground level)
-    sensorpos = np.array([0, 0, 3])
+    #[X,Y,Z]
+    sensorpos = np.array([0, 3, 0])
     #x=np.reshape(x,())
     smo = smoothness(Y)
     surface_plot(x,y,z,x,y,z)
