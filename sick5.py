@@ -7,6 +7,8 @@ import sensor_msgs.point_cloud2 as pc2
 from sensor_msgs.msg import PointCloud2, PointField
 import std_msgs.msg
 from Analysis import slopecalc
+from Analysis import smoothness
+from Analysis import surface_plot
 import numpy as np
 # from scipy.spatial.transform import Rotation as R
 
@@ -58,6 +60,9 @@ def processPointCloud2(msg):
     intsvals =  cld[vmin:vmax, umin:umax]['intensity'].ravel()
     sensorpos = np.array([0, 0, 0])
 
+    x0= cld['x'].ravel()
+    y0= cld['y'].ravel()
+    z0= cld['z'].ravel()
     # Initialise data structure to publish subset data
     data = np.zeros(np.shape(xvals), dtype=[
         ('x', np.float32),
@@ -70,6 +75,12 @@ def processPointCloud2(msg):
     data['y'] = yvals
     data['z'] = zvals
     data['intensity'] = intsvals
+
+
+    slopecalc(xvals, yvals, sensorpos)
+    print(np.shape(yvals))
+    smoothness(cld['y'])
+    surface_plot(x0, y0, z0, xvals, yvals, zvals)
 
     publishAsPointcloud2(data,'/subcloud')
 
