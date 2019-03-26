@@ -43,7 +43,7 @@ def smoothness(Y):
         smoothness = np.average(np.gradient(Y[:,i]))
         smoothIndex.append(smoothness)
     smo=np.average(smoothIndex)
-    print("Smoothness index: "smo)
+    print("Smoothness index: ",smo)
     return smo
 
 def slopecalc(x, y, sensorpos):
