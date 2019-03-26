@@ -21,6 +21,7 @@ def surface_plot(X0, Y0, Z0, X1, Y1, Z1):
     Z1 = np.ravel(Z1)
     fig = plt.figure(figsize=(20,10))
     ax = fig.add_subplot(1, 2, 1, projection='3d', adjustable='box')
+    ax.view_init(30, angle)
     #bx = fig.gca(projection='3d')
     ax.plot_trisurf(X0, Y0, Z0, linewidth=0.5, antialiased=True)
     ax.set_title("Original slope", fontweight='bold', fontsize=16, fontname='Arial', y=-0.05)
@@ -42,7 +43,7 @@ def smoothness(Y):
         smoothness = np.average(np.gradient(Y[:,i]))
         smoothIndex.append(smoothness)
     smo=np.average(smoothIndex)
-    print(smo)
+    print("Smoothness index: "smo)
     return smo
 
 def slopecalc(x, y, sensorpos):
