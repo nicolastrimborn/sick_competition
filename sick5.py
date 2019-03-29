@@ -10,7 +10,7 @@ from Analysis import slopecalc
 from Analysis import smoothness
 from Analysis import surface_plot
 import numpy as np
-# from scipy.spatial.transform import Rotation as R
+#from scipy.spatial.transform import Rotation as R
 
 def getOnePointCloud2FromSick():
     rospy.init_node('sick_mrs_6xxx', anonymous=True)
@@ -58,7 +58,7 @@ def processPointCloud2(msg):
     yvals= cld[vmin:vmax, umin:umax]['y'].ravel()
     zvals= cld[vmin:vmax, umin:umax]['z'].ravel()
     intsvals =  cld[vmin:vmax, umin:umax]['intensity'].ravel()
-    sensorpos = np.array([0, 0, 0])
+    sensorpos = np.array([0, 3, 0])
 
     x0= cld['x'].ravel()
     y0= cld['y'].ravel()
@@ -76,11 +76,9 @@ def processPointCloud2(msg):
     data['z'] = zvals
     data['intensity'] = intsvals
 
-
     slopecalc(xvals, yvals, sensorpos)
-    print(np.shape(yvals))
     smoothness(cld['y'])
-    surface_plot(x0, y0, z0, xvals, yvals, zvals)
+    surface_plot(x0, z0, (3-y0), xvals, yvals, zvals)
 
     publishAsPointcloud2(data,'/subcloud')
 
