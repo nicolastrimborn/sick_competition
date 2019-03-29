@@ -41,19 +41,8 @@ x_=[];
 for i=1:24
    x_(:,i) = linspace(x(1,i),x(end,i),100).';
 end 
-
-
-out0 = x_ - x;
-
-figure
-NC=10;
-newmap = (gray(NC));    
-colormap(newmap);      
-im = imagesc((out0));
-h = colorbar(); cl = caxis;
-shading interp;       
-
-
+    
+%%
 out1 = x - repmat(x(:,1), [1, 24]);
 figure
 NC=10;
@@ -63,7 +52,7 @@ im = imagesc((out1));
 h = colorbar(); cl = caxis;
 shading interp;       
 
-
+%%
 out2 = x - repmat(x(1,:), [100,1]);
 figure
 NC=10;
@@ -73,4 +62,12 @@ im = imagesc(out2);
 h = colorbar(); cl = caxis;
 
 
-
+%%
+out0 = x_ - x;
+figure
+NC=10;
+newmap = (gray(NC));    
+colormap(newmap);      
+im = imagesc((out0));
+h = colorbar(); cl = caxis;
+shading interp;   
