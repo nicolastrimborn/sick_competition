@@ -24,10 +24,16 @@ def surface_plot(X0, Y0, Z0, X1, Y1, Z1):
     ax.view_init(20, 5)
     #bx = fig.gca(projection='3d')
     ax.plot_trisurf(X0, Y0, Z0, linewidth=0.5, antialiased=True)
+    ax.set_xlabel("X")
+    ax.set_ylabel("Z")
+    ax.set_zlabel("Y")
     ax.set_title("Original slope", fontweight='bold', fontsize=16, fontname='Arial', y=-0.05)
     ax = fig.add_subplot(1, 2, 2, projection='3d')
     ax.view_init(20, 5)
     ax.plot_trisurf(X1, Y1, Z1, linewidth=0.5, antialiased=True)
+    ax.set_xlabel("X")
+    ax.set_ylabel("Z")
+    ax.set_zlabel("Y")
     ax.set_title("Selected slope", fontweight='bold', fontsize=16, fontname='Arial', y=-0.05)
     plt.tight_layout()
     date = ti.strftime("%d_%m_%Y_%H_%M_%S")
@@ -41,19 +47,22 @@ def smoothness(Y):
     # >1 bumpy, <1 holey, <0 slope inverted
     smoothIndex=[]
     for i in range(Y.shape[1]):
-        smoothness = np.average(np.gradient(Y[:,i]))
-        smoothIndex.append(smoothness)
-    smo=np.average(smoothIndex)
+        smooth = np.average(np.gradient(Y[:,i]))
+        smoothIndex.append(smooth)
+    smo=abs(np.average(smoothIndex))
     print("Smoothness index: ",smo)
     return smo
 
 def slopecalc(x, y, sensorpos):
     #Sensor position correction, sensor pos desceibes an offset coordinate
     y=sensorpos[1]-y
-    x=np.ravel(x)
-    y=np.ravel(y)
-    slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
-    print("Slope: ", slope)
+    x1=np.average(x[0,:])
+    x2=np.average(x[x.shape[0]-1,:])
+    y1=np.average(y[0,:])
+    y2=np.average(y[y.shape[0]-1,:])
+    slope=(x2-x1)/(y2-y1)
+    slope = 100*(np.degrees(np.arctan(slope))/45)
+    print("Slope: ", slope,"%")
     return slope
 
 

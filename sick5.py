@@ -55,14 +55,17 @@ def processPointCloud2(msg):
 
     # Select subset of pointcloud based on point start/end value and layer
     xvals= cld[vmin:vmax, umin:umax]['x'].ravel()
-    yvals= cld[vmin:vmax, umin:umax]['y'].ravel()
-    zvals= cld[vmin:vmax, umin:umax]['z'].ravel()
+    zvals= cld[vmin:vmax, umin:umax]['y'].ravel()
+    yvals= -cld[vmin:vmax, umin:umax]['z'].ravel()
     intsvals =  cld[vmin:vmax, umin:umax]['intensity'].ravel()
+    xv= cld[vmin:vmax, umin:umax]['x']
+    zv= cld[vmin:vmax, umin:umax]['y']
+    yv= -cld[vmin:vmax, umin:umax]['z']
     sensorpos = np.array([0, 3, 0])
 
     x0= cld['x'].ravel()
-    y0= cld['y'].ravel()
-    z0= cld['z'].ravel()
+    z0= -cld['y'].ravel()
+    y0= cld['z'].ravel()
     # Initialise data structure to publish subset data
     data = np.zeros(np.shape(xvals), dtype=[
         ('x', np.float32),
@@ -71,14 +74,14 @@ def processPointCloud2(msg):
         ('intensity', np.float32)
     ])
 
-    data['x'] = xvals
-    data['y'] = yvals
-    data['z'] = zvals
-    data['intensity'] = intsvals
+    #data['x'] = xvals
+    #data['y'] = yvals
+    #data['z'] = zvals
+    #data['intensity'] = intsvals
 
-    slopecalc(xvals, yvals, sensorpos)
-    smoothness(cld['y'])
-    surface_plot(x0, z0, (3-y0), xvals, yvals, zvals)
+    slopecalc(xv, yv, sensorpos)
+    smoothness(yv)
+    surface_plot(x0, (3-z0), y0, xvals, (3-zvals), yvals)
 
     publishAsPointcloud2(data,'/subcloud')
 
