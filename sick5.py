@@ -6,11 +6,11 @@ import ros_numpy
 import sensor_msgs.point_cloud2 as pc2
 from sensor_msgs.msg import PointCloud2, PointField
 import std_msgs.msg
-from Analysis import *
+from Analysis import slopecalc
 from Analysis import smoothness
 from Analysis import surface_plot
 import numpy as np
-from scipy.spatial.transform import Rotation as R
+# from scipy.spatial.transform import Rotation as R
 
 def getOnePointCloud2FromSick():
     rospy.init_node('sick_mrs_6xxx', anonymous=True)
@@ -49,22 +49,20 @@ def processPointCloud2(msg):
     vmin=0
     vmax=24
     '''
+
     # Convert PointCloud2 to np.Array
     cld = ros_numpy.numpify(msg, squeeze=False)
+
     # Select subset of pointcloud based on point start/end value and layer
     xvals= cld[vmin:vmax, umin:umax]['x'].ravel()
     yvals= cld[vmin:vmax, umin:umax]['y'].ravel()
     zvals= cld[vmin:vmax, umin:umax]['z'].ravel()
-    # intsvals = cld[vmin:vmax, umin:umax]['intensity'].ravel()
+    intsvals =  cld[vmin:vmax, umin:umax]['intensity'].ravel()
     sensorpos = np.array([0, 0, 0])
 
     x0= cld['x'].ravel()
     y0= cld['y'].ravel()
     z0= cld['z'].ravel()
-    intsvals = cld['intensity'].ravel()
-    # intsvals =  cld['intensity'].ravel()
-    # rotate([x0, y0, z0])
-
     # Initialise data structure to publish subset data
     data = np.zeros(np.shape(xvals), dtype=[
         ('x', np.float32),
@@ -76,7 +74,7 @@ def processPointCloud2(msg):
     data['x'] = xvals
     data['y'] = yvals
     data['z'] = zvals
-    # data['intensity'] = intsvals
+    data['intensity'] = intsvals
 
     # slopecalc(xvals, yvals, sensorpos)
     # smoothness(cld['y'])
