@@ -9,7 +9,9 @@ import std_msgs.msg
 from Analysis import slopecalc
 from Analysis import smoothness
 from Analysis import surface_plot
+from Analysis import scatter_plot
 import numpy as np
+
 # from scipy.spatial.transform import Rotation as R
 
 def getOnePointCloud2FromSick():
@@ -80,7 +82,7 @@ def processPointCloud2(msg):
     # smoothness(cld['y'])
     # surface_plot(x0, y0, z0, xvals, yvals, zvals)
     # publishAsPointcloud2(data,'/subcloud')
-    plotpoints(x0, y0, z0, xvals, yvals, zvals)
+    scatter_plot(x0, y0, z0, xvals, yvals, zvals)
 
 
 def publishAsPointcloud2(data, topic):

@@ -12,6 +12,25 @@ def normalization(x, y, z):
     znorm = (z - np.min(z)) / (np.max(z) - np.min(z))
     return xnorm, ynorm, znorm
 
+def scatter_plot(X0, Y0, Z0, X1, Y1, Z1):
+    X0 = np.ravel(X0)
+    Y0 = np.ravel(Y0)
+    Z0 = np.ravel(Z0)
+    X1 = np.ravel(X1)
+    Y1 = np.ravel(Y1)
+    Z1 = np.ravel(Z1)
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(X0, Y0, Z0, c='r', marker='o')
+    ax.scatter(X1, Y1, Z1, c='b', marker='^')
+    ax.set_title("Selected slope", fontweight='bold', fontsize=16, fontname='Arial', y=-0.05)
+    plt.tight_layout()
+    date = ti.strftime("%d_%m_%Y_%H_%M_%S")
+    #plt.savefig('Slope_'+date+'.png', bbox_inches='tight')
+    #plt.savefig('Slope.png', bbox_inches='tight')
+    plt.show()
+
+
 def surface_plot(X0, Y0, Z0, X1, Y1, Z1):
     X0 = np.ravel(X0)
     Y0 = np.ravel(Y0)
