@@ -12,6 +12,16 @@ def normalization(x, y, z):
     znorm = (z - np.min(z)) / (np.max(z) - np.min(z))
     return xnorm, ynorm, znorm
 
+def plotpoints(X0, Y0, Z0, X1, Y1, Z1):
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    non_zeroIndex = np.where(X0 != 0)
+    print(non_zeroIndex)
+    non_zeroIndexWindow = np.where(X1 != 0)
+    ax.scatter(X0[non_zeroIndex], Y0[non_zeroIndex], Z0[non_zeroIndex])
+    ax.set_title("Original slope", fontweight='bold', fontsize=16, fontname='Arial', y=-0.05)
+    plt.show()
+
 def surface_plot(X0, Y0, Z0, X1, Y1, Z1):
     X0 = np.ravel(X0)
     Y0 = np.ravel(Y0)
@@ -19,15 +29,24 @@ def surface_plot(X0, Y0, Z0, X1, Y1, Z1):
     X1 = np.ravel(X1)
     Y1 = np.ravel(Y1)
     Z1 = np.ravel(Z1)
+    non_zeroIndex = np.where(X0 != 0)
+    non_zeroIndexWindow = np.where(X1 != 0)
+
+    # print(np.shape(non_zeroIndex))
+    # print(non_zeroIndex)
+    stuff = [X0[non_zeroIndex], Y0[non_zeroIndex], Z0[non_zeroIndex], \
+             X1[non_zeroIndexWindow], Y1[non_zeroIndexWindow], Z1[non_zeroIndexWindow]]
+
     fig = plt.figure(figsize=(20,10))
     ax = fig.add_subplot(1, 2, 1, projection='3d', adjustable='box')
     ax.view_init(30, 180)
+    # print(X0[non_zeroIndex])
     #bx = fig.gca(projection='3d')
-    ax.plot_trisurf(X0, Y0, Z0, linewidth=0.5, antialiased=True)
+    ax.plot_trisurf(X0[non_zeroIndex], Y0[non_zeroIndex], Z0[non_zeroIndex], linewidth=0.5, antialiased=True)
     ax.set_title("Original slope", fontweight='bold', fontsize=16, fontname='Arial', y=-0.05)
     ax = fig.add_subplot(1, 2, 2, projection='3d')
     ax.view_init(30, 180)
-    ax.plot_trisurf(X1, Y1, Z1, linewidth=0.5, antialiased=True)
+    ax.plot_trisurf(X1[non_zeroIndexWindow], Y1[non_zeroIndexWindow], Z1[non_zeroIndexWindow], linewidth=0.5, antialiased=True)
     ax.set_title("Selected slope", fontweight='bold', fontsize=16, fontname='Arial', y=-0.05)
     plt.tight_layout()
     date = ti.strftime("%d_%m_%Y_%H_%M_%S")
