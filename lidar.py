@@ -57,16 +57,21 @@ fig, ax = plt.subplots()
 intersection_matrix = x - xn
 ax.matshow(intersection_matrix, cmap=plt.cm.get_cmap('Greys_r',10))
 ax.set_aspect(aspect='auto', adjustable='box')
-raw_input("Press enter to continue")
+ax.axis('off')
+plt.savefig("track.png")
+plt.close(fig)
 
 #ideal surface comparision 
 x_ = np.zeros(shape=x.shape)
 for i in range(24):
-	x_[:,i]=np.linspace(x[0,i], x[-1,i], num=100)
+        x_[:,i]=np.linspace(x[0,i], x[-1,i], num=100)
 
 print(x_.shape)
 fig1, ax1 = plt.subplots()
 intersection_matrix = x - x_
 ax1.matshow(intersection_matrix, cmap=plt.cm.get_cmap('Greys_r',10))
 ax1.set_aspect(aspect='auto', adjustable='box')
-raw_input("Press enter to continue")
+
+ax1.axis('off')
+plt.savefig("surface.png")
+plt.close(fig1)
