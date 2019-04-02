@@ -21,10 +21,12 @@ def scatter_plot(X0, Y0, Z0, X1, Y1, Z1):
     Z1 = np.ravel(Z1)
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    ax.scatter(X0, Y0, Z0, c='r', marker='o')
     ax.scatter(X1, Y1, Z1, c='b', marker='^')
+    ax.scatter(X0, Y0, Z0, c='r', marker='o')
     ax.set_title("Selected slope", fontweight='bold', fontsize=16, fontname='Arial', y=-0.05)
+    ax.set_aspect('equal')
     plt.tight_layout()
+
     date = ti.strftime("%d_%m_%Y_%H_%M_%S")
     #plt.savefig('Slope_'+date+'.png', bbox_inches='tight')
     #plt.savefig('Slope.png', bbox_inches='tight')
