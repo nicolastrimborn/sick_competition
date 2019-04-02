@@ -33,33 +33,40 @@ for topic, msg, t in bag.read_messages(topics='/cloud'):
 		break
 bag.close()
 
+
+
 ncols=920
 x = np.reshape(x, (-1, ncols))
 y = np.reshape(y, (-1, ncols))
 z = np.reshape(z, (-1, ncols))
 
-x= x[:,505:605]
-y= y[:,505:605]
-z= z[:,505:605]
+start= 505
+x= x[:,start : start + 100]
+y= y[:,start : start + 100]
+z= z[:,start : start + 100]
 
 x=x.T
 y=y.T
 z=z.T
-print(x.shape)
-print(y.shape)
-print(z.shape)
 
+
+# ski track comparision 
 xn=tile(array(x[:,0]), (24,1))
 xn=xn.T
-print(xn.shape)
-
 fig, ax = plt.subplots()
-min_val, max_val = 0, 15
-
 intersection_matrix = x - xn
-
-#cm = mpl.colors.Colormap(Greys,10)
-#ax.matshow(intersection_matrix, cmap=plt.cm.Greys_r)
 ax.matshow(intersection_matrix, cmap=plt.cm.get_cmap('Greys_r',10))
 ax.set_aspect(aspect='auto', adjustable='box')
+raw_input("Press enter to continue")
+
+#ideal surface comparision 
+x_ = np.zeros(shape=x.shape)
+for i in range(24):
+	x_[:,i]=np.linspace(x[0,i], x[-1,i], num=100)
+
+print(x_.shape)
+fig1, ax1 = plt.subplots()
+intersection_matrix = x - x_
+ax1.matshow(intersection_matrix, cmap=plt.cm.get_cmap('Greys_r',10))
+ax1.set_aspect(aspect='auto', adjustable='box')
 raw_input("Press enter to continue")
