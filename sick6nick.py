@@ -11,7 +11,7 @@ from Analysis import smoothness
 from Analysis import surface_plot
 from Analysis import scatter_plot
 from Analysis import test_points3d
-from Analysis import test_wirefreame
+# from Analysis import test_wirefreame
 from Analysis import testplot
 import numpy as np
 

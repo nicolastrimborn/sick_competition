@@ -27,6 +27,13 @@ def testplot(X0, Y0, Z0):
     # draw_geometries([downpcd])
     estimate_normals(downpcd, search_param = KDTreeSearchParamHybrid(
                             radius = 0.1, max_nn = 30))
+
+    slope = vol.crop_point_cloud(downpcd)
+    draw_geometries([slope])
+
+
+
+
     draw_geometries([downpcd])
     # draw_geometries([pcd_load])
 
