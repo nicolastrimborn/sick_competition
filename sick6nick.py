@@ -6,13 +6,13 @@ import ros_numpy
 import sensor_msgs.point_cloud2 as pc2
 from sensor_msgs.msg import PointCloud2, PointField
 import std_msgs.msg
-from Analysis import slopecalc
-from Analysis import smoothness
-from Analysis import surface_plot
-from Analysis import scatter_plot
-from Analysis import test_points3d
-# from Analysis import test_wirefreame
-from Analysis import testplot
+from Analysisnick import slopecalc
+from Analysisnick import smoothness
+from Analysisnick import surface_plot
+from Analysisnick import scatter_plot
+from Analysisnick import test_points3d
+# from Analysisnick import test_wirefreame
+from Analysisnick import testplot
 import numpy as np
 
 # from scipy.spatial.transform import Rotation as R
