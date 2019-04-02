@@ -50,28 +50,36 @@ y=y.T
 z=z.T
 
 
-# ski track comparision 
+###########
 xn=tile(array(x[:,0]), (24,1))
 xn=xn.T
 fig, ax = plt.subplots()
 intersection_matrix = x - xn
-ax.matshow(intersection_matrix, cmap=plt.cm.get_cmap('Greys_r',10))
+cs=ax.matshow(intersection_matrix, cmap=plt.cm.get_cmap('Greys_r',10))
 ax.set_aspect(aspect='auto', adjustable='box')
 ax.axis('off')
+cbar = fig.colorbar(cs)
+cbar.set_label('surface depth (m)')
 plt.savefig("track.png")
 plt.close(fig)
 
-#ideal surface comparision 
+#raw_input("Press enter to continue")
+
+
+###########
 x_ = np.zeros(shape=x.shape)
 for i in range(24):
-        x_[:,i]=np.linspace(x[0,i], x[-1,i], num=100)
+	x_[:,i]=np.linspace(x[0,i], x[-1,i], num=100)
 
 print(x_.shape)
 fig1, ax1 = plt.subplots()
 intersection_matrix = x - x_
-ax1.matshow(intersection_matrix, cmap=plt.cm.get_cmap('Greys_r',10))
+cs1 = ax1.matshow(intersection_matrix, cmap=plt.cm.get_cmap('Greys_r',10))
 ax1.set_aspect(aspect='auto', adjustable='box')
-
+cbar1 = fig1.colorbar(cs1)
 ax1.axis('off')
+cbar1.set_label('surface depth (m)')
 plt.savefig("surface.png")
 plt.close(fig1)
+
+#raw_input("Press enter to continue")
