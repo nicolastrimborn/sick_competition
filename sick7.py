@@ -79,19 +79,16 @@ def processPointCloud2(msg):
     y= cld['y'].ravel()
     z= cld['z'].ravel()
 
-    # Select subset of pointcloud based on point start/end value and layer
-    xvals= cld[vmin:vmax, umin:umax]['x'].ravel()
-    yvals= cld[vmin:vmax, umin:umax]['y'].ravel()
-    zvals= cld[vmin:vmax, umin:umax]['z'].ravel()
-    intsvals =  cld[vmin:vmax, umin:umax]['intensity'].ravel()
-    sensorpos = np.array([0, 0, 0])
+    cld1 = cld[cld['intensity'] > 64]
+    x0= cld1['x'].ravel()
+    y0= cld1['y'].ravel()
+    z0= cld1['z'].ravel()
 
-    cld = cld[cld['intensity'] > 64]
+    test_points3d(x0, z0, -y0)
 
-    test_points3d(x, z, -y)
-
-    skiPathComparison(x, y, z)
-    idealSurfaceComparision(x, y, z)
+    start= 525
+    skiPathComparison(x, y, z, start, False)
+    idealSurfaceComparision(x, y, z, start, False)
     # Initialise data structure to publish subset data
     # data = np.zeros(np.shape(xvals), dtype=[
     #     ('x', np.float32),
@@ -118,13 +115,12 @@ def publishAsPointcloud2(data, topic):
     pub = rospy.Publisher(topic, PointCloud2, queue_size=10)
     pub.publish(msg)
 
-def skiPathComparison(x, y, z):
+def skiPathComparison(x, y, z, start, update):
     ncols=920
     x = np.reshape(x, (-1, ncols))
     y = np.reshape(y, (-1, ncols))
     z = np.reshape(z, (-1, ncols))
 
-    start= 600
     x= x[:,start : start + 100]
     y= y[:,start : start + 100]
     z= z[:,start : start + 100]
@@ -135,20 +131,29 @@ def skiPathComparison(x, y, z):
 
     xn=tile(array(x[:,0]), (24,1))
     xn=xn.T
-    fig, ax = plt.subplots()
-    intersection_matrix = x - xn
-    ax.matshow(intersection_matrix, cmap=plt.cm.get_cmap('Greys_r',10))
-    ax.set_aspect(aspect='auto', adjustable='box')
-    plt.hold(False)
-    raw_input("Press enter to continue")
 
-def idealSurfaceComparision(x, y, z):
+    if update == False:
+        x1 = np.zeros((100,24))
+
+    if update == True:
+        x1 = xn
+
+    fig, ax = plt.subplots()
+    intersection_matrix = x - x1
+    cs=ax.matshow(intersection_matrix, cmap=plt.cm.get_cmap('Greys_r',10))
+    ax.set_aspect(aspect='auto', adjustable='box')
+    ax.axis('off')
+    cbar = fig.colorbar(cs)
+    cbar.set_label('surface disturbance (m)')
+    plt.savefig("track.png")
+    plt.close(fig)
+
+def idealSurfaceComparision(x, y, z, start, update):
     ncols=920
     x = np.reshape(x, (-1, ncols))
     y = np.reshape(y, (-1, ncols))
     z = np.reshape(z, (-1, ncols))
 
-    start= 600
     x= x[:,start : start + 100]
     y= y[:,start : start + 100]
     z= z[:,start : start + 100]
@@ -161,14 +166,21 @@ def idealSurfaceComparision(x, y, z):
     for i in range(24):
         x_[:,i]=np.linspace(x[0,i], x[-1,i], num=100)
 
-    print(x_.shape)
-    fig1, ax1 = plt.subplots()
-    intersection_matrix = x - x_
-    ax1.matshow(intersection_matrix, cmap=plt.cm.get_cmap('Greys_r',10))
-    ax1.set_aspect(aspect='auto', adjustable='box')
-    plt.hold(False)
-    raw_input("Press enter to continue")
+    if update == False:
+        x1 = np.zeros((100,24))
 
+    if update == True:
+        x1 = x_
+
+    fig1, ax1 = plt.subplots()
+    intersection_matrix = x - x1
+    cs1 = ax1.matshow(intersection_matrix, cmap=plt.cm.get_cmap('Greys_r',10))
+    ax1.set_aspect(aspect='auto', adjustable='box')
+    cbar1 = fig1.colorbar(cs1)
+    ax1.axis('off')
+    cbar1.set_label('surface depth (m)')
+    plt.savefig("surface.png")
+    plt.close(fig1)
 
 def playBag():
     path = '/hopme/nick/sick_competition/2019-03-12-19-51-09.bag'
