@@ -4,6 +4,32 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 from matplotlib import cm
 import time as ti
+import pandas as pd
+import seaborn as sns
+
+def test_points3d(X0, Y0, Z0):
+
+    # Make the plot
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+    ax.plot_trisurf(X0, Y0, Z0, cmap=plt.cm.viridis, linewidth=0.2)
+    ax.set_aspect('equal')
+    plt.show()
+
+    # to Add a color bar which maps values to colors.
+    surf=ax.plot_trisurf(X0, Y0, Z0, cmap=plt.cm.viridis, linewidth=0.2)
+    fig.colorbar(surf, shrink=0.5, aspect=5)
+    ax.set_aspect('equal')
+    plt.show()
+
+    # Rotate it
+    ax.view_init(30, 45)
+    plt.show()
+
+    # Other palette
+    ax.plot_trisurf(X0, Y0, Z0, cmap=plt.cm.jet, linewidth=0.01)
+    plt.show()
+
 
 def normalization(x, y, z):
     #Normalization in case of need it any calculation purpose

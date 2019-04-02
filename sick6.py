@@ -10,6 +10,7 @@ from Analysis import slopecalc
 from Analysis import smoothness
 from Analysis import surface_plot
 from Analysis import scatter_plot
+from Analysis import test_points3d
 import numpy as np
 
 # from scipy.spatial.transform import Rotation as R
@@ -62,6 +63,7 @@ def processPointCloud2(msg):
     intsvals =  cld[vmin:vmax, umin:umax]['intensity'].ravel()
     sensorpos = np.array([0, 0, 0])
 
+    cld = cld[cld['intensity'] > 64]
     x0= cld['x'].ravel()
     y0= cld['y'].ravel()
     z0= cld['z'].ravel()
@@ -82,7 +84,8 @@ def processPointCloud2(msg):
     # smoothness(cld['y'])
     # surface_plot(x0, y0, z0, xvals, yvals, zvals)
     # publishAsPointcloud2(data,'/subcloud')
-    scatter_plot(x0, z0, -y0, xvals, zvals, -yvals)
+    # scatter_plot(x0, z0, -y0, xvals, zvals, -yvals)
+    test_points3d(x0, z0, -y0)
 
 
 def publishAsPointcloud2(data, topic):

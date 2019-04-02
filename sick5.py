@@ -62,9 +62,11 @@ def processPointCloud2(msg):
     intsvals =  cld[vmin:vmax, umin:umax]['intensity'].ravel()
     sensorpos = np.array([0, 0, 0])
 
+    cld = cld[cld['intesity'] >64]
     x0= cld['x'].ravel()
     y0= cld['y'].ravel()
     z0= cld['z'].ravel()
+
     # Initialise data structure to publish subset data
     data = np.zeros(np.shape(xvals), dtype=[
         ('x', np.float32),
